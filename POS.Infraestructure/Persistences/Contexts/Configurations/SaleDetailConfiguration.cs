@@ -17,10 +17,6 @@ namespace POS.Infraestructure.Persistences.Contexts.Configurations
 
             builder.Property(e => e.Price).HasColumnType("decimal(18, 2)");
 
-            builder.HasOne(d => d.Product)
-                .WithMany(p => p.SaleDetails)
-                .HasForeignKey(d => d.ProductId)
-                .HasConstraintName("FK__SaleDetai__Produ__571DF1D5");
 
             builder.HasOne(d => d.Sale)
                 .WithMany(p => p.SaleDetails)

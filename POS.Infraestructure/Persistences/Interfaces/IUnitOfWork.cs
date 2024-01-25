@@ -10,7 +10,7 @@ namespace POS.Infraestructure.Persistences.Interfaces
         public IGenericRepository<DocumentType> DocumentType { get; }
 
         public IUserRepository User { get; }
-
+        public IWarehouseRepository Warehouse { get; }
         public void SaveChanges();
 
         public Task SaveChangesAsync();

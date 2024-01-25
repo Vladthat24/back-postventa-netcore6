@@ -1,11 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using POS.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace POS.Infraestructure.Persistences.Contexts.Configurations
 {
@@ -13,9 +8,10 @@ namespace POS.Infraestructure.Persistences.Contexts.Configurations
     {
         public void Configure(EntityTypeBuilder<Product> builder)
         {
-            builder.Property(e => e.Name).HasMaxLength(50);
+            builder.HasKey(e => e.Id);
+            builder.Property(e => e.Id).HasColumnName("ProductId");
 
-            builder.Property(e => e.SellPrice).HasColumnType("decimal(18, 2)");
+            builder.Property(e => e.Name).HasMaxLength(50);
 
             builder.HasOne(d => d.Category)
                 .WithMany(p => p.Products)
@@ -23,11 +19,6 @@ namespace POS.Infraestructure.Persistences.Contexts.Configurations
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__Products__Catego__4F7CD00D");
 
-            builder.HasOne(d => d.Provider)
-                .WithMany(p => p.Products)
-                .HasForeignKey(d => d.ProviderId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Products__Provid__5070F446");
         }
     }
 }

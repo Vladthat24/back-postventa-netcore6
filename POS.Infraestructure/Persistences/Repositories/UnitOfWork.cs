@@ -17,6 +17,7 @@ namespace POS.Infraestructure.Persistences.Repositories
         public IGenericRepository<Provider> _provider = null!;
 
         public IGenericRepository<DocumentType> _documentType = null!;
+        public IWarehouseRepository _warehouse = null!;
 
         public UnitOfWork(POSContext context)
         {
@@ -31,6 +32,7 @@ namespace POS.Infraestructure.Persistences.Repositories
 
         public IUserRepository User => _user ?? new UserRepository(_context);
 
+        public IWarehouseRepository Warehouse => _warehouse?? new WarehouseRepository(_context);
 
         public void Dispose()
         {

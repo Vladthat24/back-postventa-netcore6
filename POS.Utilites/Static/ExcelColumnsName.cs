@@ -59,5 +59,19 @@ namespace POS.Utilites.Static
             return columnsProperties;
         }
         //endRegion
+
+        //region Warehouses
+        public static List<(string ColumnName, string PropertyName)> GetColumnsWarehouses()
+        {
+            var columnsProperties = new List<(string ColumnName, string PropertyName)>
+            {
+                ("Nombre","Name"),
+                ("Fecha de Creación","AuditCreateDate"),
+                ("Estado","StateWarehouse")
+            };
+
+            return columnsProperties;
+        }
+        //endRegion
     }
 }
