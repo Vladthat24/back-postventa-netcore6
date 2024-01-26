@@ -7,5 +7,6 @@ namespace POS.Aplication.Interfaces
     public interface IWarehouseApplication
     {
         Task<BaseResponse<IEnumerable<WarehouseResponseDto>>> ListWarehouses(BaseFilterRequest filters);
+        Task<BaseResponse<WarehouseByIdResponseDto>> WarehouseById(int warehouseId);
     }
 }

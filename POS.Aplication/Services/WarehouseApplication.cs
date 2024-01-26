@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using POS.Aplication.Commons.Bases.Request;
 using POS.Aplication.Comnons.Bases.Response;
 using POS.Aplication.Comnons.Orderning;
+using POS.Aplication.Dtos.Category.Response;
 using POS.Aplication.Dtos.Warehouse.Response;
 using POS.Aplication.Interfaces;
 using POS.Infraestructure.Persistences.Interfaces;
@@ -26,11 +27,11 @@ namespace POS.Aplication.Services
 
         public async Task<BaseResponse<IEnumerable<WarehouseResponseDto>>> ListWarehouses(BaseFilterRequest filters)
         {
-            var response= new  BaseResponse<IEnumerable<WarehouseResponseDto>>();
+            var response = new BaseResponse<IEnumerable<WarehouseResponseDto>>();
             try
             {
                 var warehouses = _unitOfWork.Warehouse.GetAllQueryable();
-                if(filters.NumFilter is not null && !string.IsNullOrEmpty(filters.Textfilter))
+                if (filters.NumFilter is not null && !string.IsNullOrEmpty(filters.Textfilter))
                 {
                     switch (filters.NumFilter)
                     {
@@ -57,6 +58,35 @@ namespace POS.Aplication.Services
                 response.IsSuccess = true;
                 response.TotalRecords = await warehouses.CountAsync();
                 response.Data = _mapper.Map<IEnumerable<WarehouseResponseDto>>(items);
+                response.Message = ReplyMessage.MESSAGE_QUERY;
+
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = ReplyMessage.MESSAGE_EXCEPTION;
+                WatchLogger.Log(ex.Message);
+            }
+            return response;
+        }
+
+        public async Task<BaseResponse<WarehouseByIdResponseDto>> WarehouseById(int warehouseId)
+        {
+            var response = new BaseResponse<WarehouseByIdResponseDto>();
+            try
+            {
+
+                var warehouse = await _unitOfWork.Warehouse.GetByIdAsync(warehouseId);
+
+                if (warehouse is null)
+                {
+                    response.IsSuccess = false;
+                    response.Message = ReplyMessage.MESSAGE_QUERY_EMPTY;
+                    return response;
+                }
+
+                response.IsSuccess = true;
+                response.Data = _mapper.Map<WarehouseByIdResponseDto>(warehouse);
                 response.Message = ReplyMessage.MESSAGE_QUERY;
 
             }
