@@ -1,6 +1,8 @@
-﻿using POS.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore.Storage;
+using POS.Domain.Entities;
 using POS.Infraestructure.Persistences.Contexts;
 using POS.Infraestructure.Persistences.Interfaces;
+using System.Data;
 
 namespace POS.Infraestructure.Persistences.Repositories
 {
@@ -17,7 +19,12 @@ namespace POS.Infraestructure.Persistences.Repositories
         public IGenericRepository<Provider> _provider = null!;
 
         public IGenericRepository<DocumentType> _documentType = null!;
+
         public IWarehouseRepository _warehouse = null!;
+
+        public IGenericRepository<Product> _product = null!;
+
+        public IProductStockRepository _productStock = null!;
 
         public UnitOfWork(POSContext context)
         {
@@ -33,6 +40,16 @@ namespace POS.Infraestructure.Persistences.Repositories
         public IUserRepository User => _user ?? new UserRepository(_context);
 
         public IWarehouseRepository Warehouse => _warehouse?? new WarehouseRepository(_context);
+
+        public IGenericRepository<Product> Product => _product ?? new GenericRepository<Product>(_context);
+
+        public IProductStockRepository ProductStock => _productStock ?? new ProductStockRepository(_context);
+
+        public IDbTransaction BeginTransaction()
+        {
+            var transaction = _context.Database.BeginTransaction();
+            return transaction.GetDbTransaction();
+        }
 
         public void Dispose()
         {

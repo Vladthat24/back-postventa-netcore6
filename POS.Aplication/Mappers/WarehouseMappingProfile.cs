@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using POS.Aplication.Dtos.Warehouse.Request;
 using POS.Aplication.Dtos.Warehouse.Response;
 using POS.Domain.Entities;
 using POS.Utilites.Static;
@@ -14,9 +15,11 @@ namespace POS.Aplication.Mappers
                 .ForMember(x => x.StateWarehouse, x => x.MapFrom(y => y.State.Equals((int)StateTypes.Active) ? "Activo" : "Inactivo"))
                 .ReverseMap();
 
-            CreateMap<Warehouse, WarehouseResponseDto>().
+            CreateMap<Warehouse, WarehouseByIdResponseDto>().
                 ForMember(x => x.WarehouseId, x => x.MapFrom(y => y.Id))
                 .ReverseMap();
+
+            CreateMap<WarehouseRequestDto, Warehouse>();
         }
     }
 }

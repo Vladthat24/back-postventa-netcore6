@@ -13,11 +13,6 @@ namespace POS.Infraestructure.Persistences.Contexts.Configurations
 
             builder.Property(e => e.Total).HasColumnType("decimal(18, 2)");
 
-            builder.HasOne(d => d.Provider)
-                .WithMany(p => p.Purcharses)
-                .HasForeignKey(d => d.ProviderId)
-                .HasConstraintName("FK__Purcharse__Provi__5535A963");
-
             builder.HasOne(d => d.User)
                 .WithMany(p => p.Purcharses)
                 .HasForeignKey(d => d.UserId)

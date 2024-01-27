@@ -3,9 +3,10 @@ using Microsoft.EntityFrameworkCore;
 using POS.Aplication.Commons.Bases.Request;
 using POS.Aplication.Comnons.Bases.Response;
 using POS.Aplication.Comnons.Orderning;
-using POS.Aplication.Dtos.Category.Response;
+using POS.Aplication.Dtos.Warehouse.Request;
 using POS.Aplication.Dtos.Warehouse.Response;
 using POS.Aplication.Interfaces;
+using POS.Domain.Entities;
 using POS.Infraestructure.Persistences.Interfaces;
 using POS.Utilites.Static;
 using WatchDog;
@@ -70,6 +71,7 @@ namespace POS.Aplication.Services
             return response;
         }
 
+
         public async Task<BaseResponse<WarehouseByIdResponseDto>> WarehouseById(int warehouseId)
         {
             var response = new BaseResponse<WarehouseByIdResponseDto>();
@@ -96,6 +98,112 @@ namespace POS.Aplication.Services
                 response.Message = ReplyMessage.MESSAGE_EXCEPTION;
                 WatchLogger.Log(ex.Message);
             }
+            return response;
+        }
+
+
+        public async Task<BaseResponse<bool>> RegisterWareHouse(WarehouseRequestDto requestDto)
+        {
+            var response= new BaseResponse<bool>();
+
+            using var transation = _unitOfWork.BeginTransaction();
+
+            try
+            {
+                var warehouse = _mapper.Map<Warehouse>(requestDto);
+                response.Data= await _unitOfWork.Warehouse.RegisterAsync(warehouse);
+                int warehouseId = warehouse.Id;
+                var products = await _unitOfWork.Product.GetAllAsync();
+
+                await RegisterProductStockByAlmacen(products, warehouseId);
+
+                transation.Commit();
+                response.IsSuccess = true;
+                response.Message = ReplyMessage.MESSAGE_SAVE;
+
+
+            }catch (Exception ex)
+            {
+                transation.Rollback();
+                response.IsSuccess = false;
+                response.Message = ReplyMessage.MESSAGE_EXCEPTION;
+                WatchLogger.Log(ex.Message);
+            }
+
+            return response;
+        }
+
+        private async Task RegisterProductStockByAlmacen(IEnumerable<Product>products, int warehouseId)
+        {
+            foreach (var product in products)
+            {
+                var newProductStock = new ProductStock
+                {
+                    ProductId = product.Id,
+                    WarehouseId = warehouseId,
+                    CurrentStock = 0,
+                    PurchasePrice = 0
+                };
+
+                await _unitOfWork.ProductStock.RegisterProductStock(newProductStock);
+            }
+        }
+
+        public async Task<BaseResponse<bool>> EditWarehouse(int warehouseId, WarehouseRequestDto requestDto)
+        {
+            var response= new BaseResponse<bool>();
+            try
+            {   
+                var warehouse= _mapper.Map<Warehouse>(requestDto);
+                warehouse.Id = warehouseId;
+                response.Data = await _unitOfWork.Warehouse.EditAsync(warehouse);
+
+                if (!response.Data)
+                {
+                    response.IsSuccess = false;
+                    response.Message = ReplyMessage.MESSAGE_FALIED;
+                    return response;
+                }
+
+                response.IsSuccess = true;
+                response.Message = ReplyMessage.MESSAGE_UPDATE;
+
+
+            }catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = ReplyMessage.MESSAGE_EXCEPTION;
+                WatchLogger.Log(ex.Message);
+            }
+
+            return response;
+        }
+
+        public async Task<BaseResponse<bool>> RemoveWarehouse(int warehouseId)
+        {
+            var response = new BaseResponse<bool>();
+
+            try
+            {
+                response.Data = await _unitOfWork.Warehouse.RemoveAsync(warehouseId);
+
+                if (!response.Data)
+                {
+                    response.IsSuccess = false;
+                    response.Message = ReplyMessage.MESSAGE_FALIED;
+                    return response;
+                }
+
+                response.IsSuccess = true;
+                response.Message = ReplyMessage.MESSAGE_DELETE;
+
+            }catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = ReplyMessage.MESSAGE_EXCEPTION;
+                WatchLogger.Log(ex.Message);
+            }
+
             return response;
         }
     }

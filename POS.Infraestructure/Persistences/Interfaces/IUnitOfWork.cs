@@ -1,4 +1,5 @@
 ﻿using POS.Domain.Entities;
+using System.Data;
 
 namespace POS.Infraestructure.Persistences.Interfaces
 {
@@ -11,9 +12,15 @@ namespace POS.Infraestructure.Persistences.Interfaces
 
         public IUserRepository User { get; }
         public IWarehouseRepository Warehouse { get; }
+        public IGenericRepository<Product> Product { get; }
+
+        public IProductStockRepository ProductStock { get; }
         public void SaveChanges();
 
         public Task SaveChangesAsync();
+
+        //Transaction para validar el "OK" de todas las tareas o hacer rollback
+        IDbTransaction BeginTransaction();
 
     }
 }
