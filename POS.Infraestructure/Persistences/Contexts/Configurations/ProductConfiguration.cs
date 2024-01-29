@@ -13,6 +13,8 @@ namespace POS.Infraestructure.Persistences.Contexts.Configurations
 
             builder.Property(e => e.Name).HasMaxLength(50);
 
+            builder.Property(e => e.UnitSalePrice).HasColumnType("decimal(10,2)");
+
             builder.HasOne(d => d.Category)
                 .WithMany(p => p.Products)
                 .HasForeignKey(d => d.CategoryId)
