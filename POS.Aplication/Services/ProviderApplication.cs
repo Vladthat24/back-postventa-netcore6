@@ -52,9 +52,9 @@ namespace POS.Aplication.Services
                     }
                 }
 
-                if (filters.stateFilter is not null)
+                if (filters.StateFilter is not null)
                 {
-                    providers = providers.Where(x => x.State.Equals(filters.stateFilter));
+                    providers = providers.Where(x => x.State.Equals(filters.StateFilter));
                 }
                 if (!string.IsNullOrEmpty(filters.StartDate) && !string.IsNullOrEmpty(filters.EndDate))
                 {

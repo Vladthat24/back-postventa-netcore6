@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using POS.Aplication.Commons.Bases.Request;
 using POS.Aplication.Comnons.Bases.Response;
+using POS.Aplication.Comnons.Bases.Select.Response;
 using POS.Aplication.Comnons.Orderning;
 using POS.Aplication.Dtos.Category.Request;
 using POS.Aplication.Dtos.Category.Response;
@@ -54,9 +55,9 @@ namespace POS.Aplication.Services
                     }
                 }
 
-                if (filters.stateFilter is not null)
+                if (filters.StateFilter is not null)
                 {
-                    categories = categories.Where(x => x.State.Equals(filters.stateFilter));
+                    categories = categories.Where(x => x.State.Equals(filters.StateFilter));
                 }
                 if (!string.IsNullOrEmpty(filters.StartDate) && !string.IsNullOrEmpty(filters.EndDate))
                 {
@@ -84,15 +85,15 @@ namespace POS.Aplication.Services
             return response;
         }
 
-        public async Task<BaseResponse<IEnumerable<CategorySelectResponseDto>>> ListSelectCategories()
+        public async Task<BaseResponse<IEnumerable<SelectResponse>>> ListSelectCategories()
         {
-            var response=new BaseResponse<IEnumerable<CategorySelectResponseDto>>();
+            var response=new BaseResponse<IEnumerable<SelectResponse>>();
             var categories = await _unitOfWork.Category.GetAllAsync();
 
             if(categories is not null)
             {
                 response.IsSuccess = true;
-                response.Data = _mapper.Map<IEnumerable<CategorySelectResponseDto>>(categories);
+                response.Data = _mapper.Map<IEnumerable<SelectResponse>>(categories);
                 response.Message = ReplyMessage.MESSAGE_QUERY;
             }
             else

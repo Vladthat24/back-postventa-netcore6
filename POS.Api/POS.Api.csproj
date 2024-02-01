@@ -21,4 +21,8 @@
     <ProjectReference Include="..\POS.Utilites\POS.Utilites.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
 </Project>

@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using POS.Infraestructure.FileExcel;
+using POS.Infraestructure.FileStorage;
 using POS.Infraestructure.Persistences;
 using POS.Infraestructure.Persistences.Contexts;
 using POS.Infraestructure.Persistences.Interfaces;
@@ -21,6 +22,7 @@ namespace POS.Infraestructure.Extensions
             services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddTransient<IGenerateExcel, GenerateExcel>();
+            services.AddTransient<IFileStorageLocal,FileStorageLocal>();
             return services;
         }
     }

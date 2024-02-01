@@ -41,9 +41,9 @@ namespace POS.Aplication.Services
                             break;
                     }
                 }
-                if (filters.stateFilter is not null)
+                if (filters.StateFilter is not null)
                 {
-                    warehouses = warehouses.Where(x => x.State.Equals(filters.stateFilter));
+                    warehouses = warehouses.Where(x => x.State.Equals(filters.StateFilter));
                 }
                 if (!string.IsNullOrEmpty(filters.StartDate) && !string.IsNullOrEmpty(filters.EndDate))
                 {

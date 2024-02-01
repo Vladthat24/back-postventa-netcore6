@@ -73,5 +73,23 @@ namespace POS.Utilites.Static
             return columnsProperties;
         }
         //endRegion
+
+
+        public static List<(string ColumnName, string PropertyName)> GetColumnsProducts()
+        {
+            var columnsProperties = new List<(string ColumnName, string PropertyName)>
+            {
+                ("Codigo de Producto","Code"),
+                ("Nombre","Name"),
+                ("Stock Mín.","StockMin"),
+                ("Sock Máx.","StockMax"),
+                ("Precio de Venta","UnitSalePrice"),
+                ("Categoría","Category"),
+                ("Fecha de Creación","AuditCreateDate"),
+                ("Estado","StateProvider")
+            };
+
+            return columnsProperties;
+        }
     }
 }

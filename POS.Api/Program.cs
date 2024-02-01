@@ -23,6 +23,9 @@ builder.Services.AddSwagger();
 //Configuracion de ClienteId Google
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("GoogleSettings"));
 
+//Subir archivos local
+builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: Cors,
@@ -47,6 +50,9 @@ if(app.Environment.IsDevelopment())
 app.UseWatchDogExceptionLogger();
 
 app.UseHttpsRedirection();
+
+app.UseStaticFiles(); //Para visualizar imagenes
+
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
