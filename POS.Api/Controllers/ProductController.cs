@@ -13,12 +13,13 @@ namespace POS.Api.Controllers
     {
         private readonly IProductApplication _productApplication;
         private readonly IGenerateExcelApplication _generateExcelApplication;
+        private readonly IProductStockApplication _productStockApplication;
 
-
-        public ProductController(IProductApplication productApplication, IGenerateExcelApplication generateExcelApplication)
+        public ProductController(IProductApplication productApplication, IGenerateExcelApplication generateExcelApplication, IProductStockApplication productStockApplication)
         {
             _productApplication = productApplication;
             _generateExcelApplication = generateExcelApplication;
+            _productStockApplication = productStockApplication;
         }
 
         [HttpGet]
@@ -60,6 +61,13 @@ namespace POS.Api.Controllers
         public async Task<IActionResult> RemoveProduct(int productId)
         {
             var response = await _productApplication.RemoveProduct(productId);
+            return Ok(response);
+        }
+
+        [HttpGet("ProductStockByWarehouse/{productId:int}")]
+        public async Task<IActionResult> ProductStockByWarehouse(int productId)
+        {
+            var response=await _productStockApplication.GetProductStockByWarehouseAsync(productId);
             return Ok(response);
         }
     }

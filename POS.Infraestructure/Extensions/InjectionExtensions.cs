@@ -23,6 +23,8 @@ namespace POS.Infraestructure.Extensions
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddTransient<IGenerateExcel, GenerateExcel>();
             services.AddTransient<IFileStorageLocal,FileStorageLocal>();
+
+
             return services;
         }
     }

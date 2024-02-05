@@ -5,6 +5,8 @@ using POS.Aplication.Comnons.Orderning;
 using POS.Aplication.Extensions.WatchDog;
 using POS.Aplication.Interfaces;
 using POS.Aplication.Services;
+using POS.Infraestructure.Persistences.Interfaces;
+using POS.Infraestructure.Persistences.Repositories;
 using System.Reflection;
 
 namespace POS.Aplication.Extensions
@@ -29,6 +31,7 @@ namespace POS.Aplication.Extensions
             services.AddScoped<IWarehouseApplication, WarehouseApplication>();
             services.AddScoped<IProductApplication,ProductApplication>();
             services.AddScoped<IFileStorageLocalApplication, FileStorageLocalApplication>();
+            services.AddScoped<IProductStockApplication, ProductStockApplication>();
 
             services.AddWatchDog(configuration);
             return services;
