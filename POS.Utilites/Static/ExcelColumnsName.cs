@@ -91,5 +91,19 @@ namespace POS.Utilites.Static
 
             return columnsProperties;
         }
+
+        public static List<(string ColumnName, string PropertyName)> GetColumnsPurcharse()
+        {
+            var columnsProperties = new List<(string ColumnName, string PropertyName)>
+            {
+                ("Proveedor","Provider"),
+                ("Almacén","warehouse"),
+                ("Monto Total.","TotalAmount"),
+                ("Fecha de Compra","DateOfPurcharse"),
+ 
+            };
+
+            return columnsProperties;
+        }
     }
 }

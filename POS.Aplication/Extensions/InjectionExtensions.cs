@@ -32,6 +32,7 @@ namespace POS.Aplication.Extensions
             services.AddScoped<IProductApplication,ProductApplication>();
             services.AddScoped<IFileStorageLocalApplication, FileStorageLocalApplication>();
             services.AddScoped<IProductStockApplication, ProductStockApplication>();
+            services.AddScoped<IPurcharseApplication, PurcharseApplication>();
 
             services.AddWatchDog(configuration);
             return services;

@@ -26,6 +26,8 @@ namespace POS.Infraestructure.Persistences.Repositories
 
         public IProductStockRepository _productStock = null!;
 
+        public IGenericRepository<Purcharse> _purcharse = null!;
+
         public UnitOfWork(POSContext context)
         {
             _context = context;
@@ -44,6 +46,8 @@ namespace POS.Infraestructure.Persistences.Repositories
         public IGenericRepository<Product> Product => _product ?? new GenericRepository<Product>(_context);
 
         public IProductStockRepository ProductStock => _productStock ?? new ProductStockRepository(_context);
+
+        public IGenericRepository<Purcharse> Purcharse => _purcharse ?? new GenericRepository<Purcharse>(_context);
 
         public IDbTransaction BeginTransaction()
         {

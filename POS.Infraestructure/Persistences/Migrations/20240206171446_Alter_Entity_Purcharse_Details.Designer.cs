@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using POS.Infraestructure.Persistences.Contexts;
 
@@ -11,9 +12,10 @@ using POS.Infraestructure.Persistences.Contexts;
 namespace POS.Infraestructure.Persistences.Migrations
 {
     [DbContext(typeof(POSContext))]
-    partial class POSContextModelSnapshot : ModelSnapshot
+    [Migration("20240206171446_Alter_Entity_Purcharse_Details")]
+    partial class Alter_Entity_Purcharse_Details
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -637,12 +639,17 @@ namespace POS.Infraestructure.Persistences.Migrations
                     b.Property<decimal>("TotalAmount")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
                     b.Property<int>("WarehouseId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ProviderId");
+
+                    b.HasIndex("UserId");
 
                     b.HasIndex("WarehouseId");
 
@@ -1078,6 +1085,10 @@ namespace POS.Infraestructure.Persistences.Migrations
                         .WithMany()
                         .HasForeignKey("ProviderId");
 
+                    b.HasOne("POS.Domain.Entities.User", null)
+                        .WithMany("Purcharses")
+                        .HasForeignKey("UserId");
+
                     b.HasOne("POS.Domain.Entities.Warehouse", "Warehouse")
                         .WithMany()
                         .HasForeignKey("WarehouseId")
@@ -1257,6 +1268,8 @@ namespace POS.Infraestructure.Persistences.Migrations
 
             modelBuilder.Entity("POS.Domain.Entities.User", b =>
                 {
+                    b.Navigation("Purcharses");
+
                     b.Navigation("Sales");
 
                     b.Navigation("UserRoles");
