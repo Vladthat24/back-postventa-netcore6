@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using POS.Aplication.Commons.Bases.Request;
 using POS.Aplication.Comnons.Bases.Response;
 using POS.Aplication.Comnons.Orderning;
+using POS.Aplication.Dtos.Purcharse.Request;
 using POS.Aplication.Dtos.Purcharse.Response;
 using POS.Aplication.Interfaces;
 using POS.Infraestructure.Persistences.Interfaces;
@@ -62,6 +63,54 @@ namespace POS.Aplication.Services
                 response.Message = ReplyMessage.MESSAGE_QUERY;
             }
             catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = ReplyMessage.MESSAGE_EXCEPTION;
+                WatchDog.WatchLogger.Log(ex.Message);
+            }
+            return response;
+        }
+
+        public async Task<BaseResponse<PurcharseByIdResponseDto>> PurcharseById(int purcharseId)
+        {
+            var response = new BaseResponse<PurcharseByIdResponseDto>();
+            try
+            {
+                var purcharse= await _unitOfwork.Purcharse.GetByIdAsync(purcharseId);
+                if(purcharse is null)
+                {
+                    response.IsSuccess = false;
+                    response.Message = ReplyMessage.MESSAGE_QUERY_EMPTY;
+                    return response;
+                }
+
+                var purcharseDetails = await _unitOfwork.PurcharseDetail.GetPurcharseDetailByPurcharseId(purcharse.Id);
+
+                purcharse.PurcharseDetails = purcharseDetails.ToList();
+
+                response.IsSuccess = true;
+                response.Data = _mapper.Map<PurcharseByIdResponseDto>(purcharse);
+                response.Message = ReplyMessage.MESSAGE_QUERY;
+
+                return response;
+
+            }catch(Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = ReplyMessage.MESSAGE_EXCEPTION;
+                WatchDog.WatchLogger.Log(ex.Message);
+            }
+            return response;
+        }
+
+        public async Task<BaseResponse<bool>> RegisterPurcharse(PurcharseRequestDto requestDto)
+        {
+            var response= new BaseResponse<bool>();
+
+            try
+            {
+
+            }catch(Exception ex)
             {
                 response.IsSuccess = false;
                 response.Message = ReplyMessage.MESSAGE_EXCEPTION;

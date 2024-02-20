@@ -37,5 +37,13 @@ namespace POS.Infraestructure.Persistences.Repositories
                 .ToArrayAsync();
         }
 
+        public async Task<ProductStock> GetProductStockByProductId(int productId, int warehouseId)
+        {
+            var productStock = await _context.ProductStocks
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.ProductId == productId && x.WarehouseId == warehouseId);
+
+            return productStock!;
+        }
     }
 }

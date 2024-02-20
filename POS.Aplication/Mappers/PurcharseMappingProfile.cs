@@ -1,11 +1,6 @@
 ﻿using AutoMapper;
 using POS.Aplication.Dtos.Purcharse.Response;
 using POS.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace POS.Aplication.Mappers
 {
@@ -19,6 +14,23 @@ namespace POS.Aplication.Mappers
                 .ForMember(x => x.Warehouse, x => x.MapFrom(y => y.Warehouse.Name))
                 .ForMember(x => x.DateOfPurcharse, x => x.MapFrom(y => y.AuditCreateDate))
                 .ReverseMap();
+
+            //Detalle
+            CreateMap<Purcharse, PurcharseByIdResponseDto>()
+                .ForMember(x => x.PurcharseId, x => x.MapFrom(y => y.Id))
+                .ReverseMap();
+
+            //Obtener detalle de la compra
+            CreateMap<PurcharseDetail, PurcharseDetailByIdResponseDto>()
+                .ForMember(x => x.ProductId, x => x.MapFrom(y => y.ProductId))
+                .ForMember(x => x.Image, x => x.MapFrom(y => y.Product!.Image))
+                .ForMember(x => x.Code, x => x.MapFrom(y => y.Product!.Code))
+                .ForMember(x => x.Name, x => x.MapFrom(y => y.Product!.Name))
+                .ForMember(x => x.TotalAmount, x => x.MapFrom(y => y.Total))
+                .ReverseMap();
+
+
+
 
         }
     }

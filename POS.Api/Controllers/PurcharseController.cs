@@ -32,5 +32,13 @@ namespace POS.Api.Controllers
             return Ok(response);
         }
 
+        [HttpGet("{purcharseId:int}")]
+        public async Task<IActionResult> PurcharseById(int purcharseId)
+        {
+            var response = await _purcharseApplication.PurcharseById(purcharseId);
+            return Ok(response);
+        }
+
+
     }
 }
