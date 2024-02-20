@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using POS.Aplication.Commons.Bases.Request;
+using POS.Aplication.Dtos.Purcharse.Request;
 using POS.Aplication.Interfaces;
 using POS.Utilites.Static;
 
@@ -39,6 +40,18 @@ namespace POS.Api.Controllers
             return Ok(response);
         }
 
+        [HttpPost("Register")]
+        public async Task<IActionResult> RegisterPurcharse([FromBody] PurcharseRequestDto requestDto)
+        {
+            var response = await _purcharseApplication.RegisterPurcharse(requestDto);
+            return Ok(response);
+        }
 
+        [HttpPut("Cancel/{purcharseId:int}")]
+        public async Task<IActionResult> CancelPurcharse(int purcharseId)
+        {
+            var response = await _purcharseApplication.CancelPurcharse(purcharseId);
+            return Ok(response);
+        }
     }
 }

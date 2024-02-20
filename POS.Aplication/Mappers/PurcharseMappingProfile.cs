@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using POS.Aplication.Dtos.Purcharse.Request;
 using POS.Aplication.Dtos.Purcharse.Response;
 using POS.Domain.Entities;
 
@@ -29,8 +30,8 @@ namespace POS.Aplication.Mappers
                 .ForMember(x => x.TotalAmount, x => x.MapFrom(y => y.Total))
                 .ReverseMap();
 
-
-
+            CreateMap<PurcharseRequestDto, Purcharse>();
+            CreateMap<PurcharseDetailRequestDto, PurcharseDetail>();
 
         }
     }

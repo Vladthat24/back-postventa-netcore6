@@ -10,5 +10,6 @@ namespace POS.Aplication.Interfaces
         Task<BaseResponse<IEnumerable<PurcharseResponseDto>>> ListPurcharse(BaseFilterRequest filters);
         Task<BaseResponse<PurcharseByIdResponseDto>> PurcharseById(int purcharseId);
         Task<BaseResponse<bool>> RegisterPurcharse(PurcharseRequestDto requestDto);
+        Task<BaseResponse<bool>> CancelPurcharse(int purcharseId);
     }
 }

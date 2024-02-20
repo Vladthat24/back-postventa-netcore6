@@ -6,6 +6,7 @@ using POS.Aplication.Comnons.Orderning;
 using POS.Aplication.Dtos.Purcharse.Request;
 using POS.Aplication.Dtos.Purcharse.Response;
 using POS.Aplication.Interfaces;
+using POS.Domain.Entities;
 using POS.Infraestructure.Persistences.Interfaces;
 using POS.Utilites.Static;
 
@@ -23,6 +24,7 @@ namespace POS.Aplication.Services
             _mapper = mapper;
             _orderingQuery = orderingQuery;
         }
+
 
 
         public async Task<BaseResponse<IEnumerable<PurcharseResponseDto>>> ListPurcharse(BaseFilterRequest filters)
@@ -107,8 +109,60 @@ namespace POS.Aplication.Services
         {
             var response= new BaseResponse<bool>();
 
+            using var transaction = _unitOfwork.BeginTransaction();
+
             try
             {
+                var purcharse = _mapper.Map<Purcharse>(requestDto);
+                purcharse.State = (int)StateTypes.Active;
+                await _unitOfwork.Purcharse.RegisterAsync(purcharse);
+
+                foreach(var item in purcharse.PurcharseDetails)
+                {
+                    var productStock = await _unitOfwork.ProductStock
+                        .GetProductStockByProductId(item.ProductId,requestDto.WarehouseId);
+                    productStock.CurrentStock += item.Quantity;
+                    productStock.PurchasePrice = item.UnitPurcharsePrice;
+                    await _unitOfwork.ProductStock.UpdateCurrentStockByProduct(productStock);
+
+                }
+
+                transaction.Commit();
+                response.IsSuccess = true;
+                response.Message = ReplyMessage.MESSAGE_SAVE;
+
+            
+            }catch(Exception ex)
+            {
+                transaction.Rollback();
+                response.IsSuccess = false;
+                response.Message = ReplyMessage.MESSAGE_EXCEPTION;
+                WatchDog.WatchLogger.Log(ex.Message);
+            }
+            return response;
+        }
+
+        public async Task<BaseResponse<bool>> CancelPurcharse(int purcharseId)
+        {
+            var response = new BaseResponse<bool>();
+
+            using var transaction = _unitOfwork.BeginTransaction();
+
+            try
+            {
+                var purcharse = await PurcharseById(purcharseId);
+                response.Data = await _unitOfwork.Purcharse.RemoveAsync(purcharseId);
+
+                foreach(var item in purcharse.Data!.PurcharseDetails)
+                {
+                    var productStock = await _unitOfwork.ProductStock
+                        .GetProductStockByProductId(item.ProductId, purcharse.Data.WarehouseId);
+                    productStock.CurrentStock -= item.Quantity;
+                    await _unitOfwork.ProductStock.UpdateCurrentStockByProduct(productStock);
+                }
+                transaction.Commit();
+                response.IsSuccess = true;
+                response.Message = ReplyMessage.MESSAGE_DELETE;
 
             }catch(Exception ex)
             {

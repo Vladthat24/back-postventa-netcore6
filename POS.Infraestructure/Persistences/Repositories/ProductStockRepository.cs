@@ -45,5 +45,12 @@ namespace POS.Infraestructure.Persistences.Repositories
 
             return productStock!;
         }
+
+        public async Task<bool> UpdateCurrentStockByProduct(ProductStock productStock)
+        {
+            _context.Update(productStock);
+            var recordAffected = await _context.SaveChangesAsync();
+            return recordAffected > 0;
+        }
     }
 }
