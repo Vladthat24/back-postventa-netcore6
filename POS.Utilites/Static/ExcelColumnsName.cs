@@ -97,7 +97,7 @@ namespace POS.Utilites.Static
             var columnsProperties = new List<(string ColumnName, string PropertyName)>
             {
                 ("Proveedor","Provider"),
-                ("Almacén","warehouse"),
+                ("Almacén","Warehouse"),
                 ("Monto Total.","TotalAmount"),
                 ("Fecha de Compra","DateOfPurcharse"),
  

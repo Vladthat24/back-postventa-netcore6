@@ -45,10 +45,10 @@ namespace POS.Aplication.Services
                     }
                 }
 
-                if (filters.StateFilter is not null)
-                {
-                    purcharses = purcharses.Where(x => x.State.Equals(filters.StateFilter));
-                }
+                //if (filters.StateFilter is not null)
+                //{
+                //    purcharses = purcharses.Where(x => x.State.Equals(filters.StateFilter));
+                //}
                 if (!string.IsNullOrEmpty(filters.StartDate) && !string.IsNullOrEmpty(filters.EndDate))
                 {
                     purcharses = purcharses.Where(x => x.AuditCreateDate >= Convert.ToDateTime(filters.StartDate)
