@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using POS.Aplication.Commons.Bases.Request;
 using POS.Aplication.Comnons.Bases.Response;
+using POS.Aplication.Comnons.Bases.Select.Response;
 using POS.Aplication.Comnons.Orderning;
 using POS.Aplication.Dtos.Provider.Request;
 using POS.Aplication.Dtos.Provider.Response;
@@ -84,6 +85,36 @@ namespace POS.Aplication.Services
 
             return response;
 
+        }
+
+        public async Task<BaseResponse<IEnumerable<SelectResponse>>> ListSelectProviders()
+        {
+            var response = new BaseResponse<IEnumerable<SelectResponse>>();
+
+            try
+            {
+                var providers = await _unitOfWork.Provider.GetSelectAsync();
+                
+                if(providers is null)
+                {
+                    response.IsSuccess = true;
+                    response.Message = ReplyMessage.MESSAGE_QUERY_EMPTY;
+                    return response;
+                }
+
+                response.IsSuccess = true;
+                response.Data=_mapper.Map<IEnumerable<SelectResponse>>(providers);
+                response.Message = ReplyMessage.MESSAGE_QUERY;
+
+
+            }catch(Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = ReplyMessage.MESSAGE_EXCEPTION;
+                WatchDog.WatchLogger.Log(ex.Message);
+            }
+
+            return response;
         }
 
         public async Task<BaseResponse<ProviderByIdResponseDto>> ProviderById(int providerId)
@@ -221,5 +252,7 @@ namespace POS.Aplication.Services
 
             return response;
         }
+
+
     }
 }

@@ -15,6 +15,8 @@ namespace POS.Aplication.Mappers
                 .ForMember(x=>x.DocumentType,x=>x.MapFrom(y=>y.DocumentType.Abbreviation))
                 .ForMember(x => x.StateProvider, x => x.MapFrom(y => y.State.Equals((int)StateTypes.Active) ? "Activo" : "Inactivo"))
                 .ReverseMap();
+
+
             
             CreateMap<Provider, ProviderByIdResponseDto>()
                 .ForMember(x => x.ProviderId, x => x.MapFrom(y => y.Id))
