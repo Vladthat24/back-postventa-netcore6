@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using POS.Aplication.Comnons.Bases.Select.Response;
 using POS.Aplication.Dtos.Provider.Request;
 using POS.Aplication.Dtos.Provider.Response;
 using POS.Domain.Entities;
@@ -16,7 +17,9 @@ namespace POS.Aplication.Mappers
                 .ForMember(x => x.StateProvider, x => x.MapFrom(y => y.State.Equals((int)StateTypes.Active) ? "Activo" : "Inactivo"))
                 .ReverseMap();
 
-
+            CreateMap<Provider, SelectResponse>()
+                .ForMember(x => x.Description, x => x.MapFrom(y => y.Name))
+                .ReverseMap();
             
             CreateMap<Provider, ProviderByIdResponseDto>()
                 .ForMember(x => x.ProviderId, x => x.MapFrom(y => y.Id))

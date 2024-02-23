@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using POS.Aplication.Commons.Bases.Request;
 using POS.Aplication.Comnons.Bases.Response;
+using POS.Aplication.Comnons.Bases.Select.Response;
 using POS.Aplication.Comnons.Orderning;
 using POS.Aplication.Dtos.Warehouse.Request;
 using POS.Aplication.Dtos.Warehouse.Response;
@@ -204,6 +205,35 @@ namespace POS.Aplication.Services
                 WatchLogger.Log(ex.Message);
             }
 
+            return response;
+        }
+
+        public async Task<BaseResponse<IEnumerable<SelectResponse>>> ListSelectWarehouse()
+        {
+            var response = new BaseResponse<IEnumerable<SelectResponse>>();
+
+            try
+            {
+                var warehouses = await _unitOfWork.Warehouse.GetSelectAsync();
+                
+                if(warehouses is null)
+                {
+                    response.IsSuccess = false;
+                    response.Message = ReplyMessage.MESSAGE_QUERY_EMPTY;
+                    return response;
+
+                }
+
+                response.IsSuccess = true;
+                response.Data= _mapper.Map<IEnumerable<SelectResponse>>(warehouses);
+                response.Message = ReplyMessage.MESSAGE_QUERY;
+
+            }catch(Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = ReplyMessage.MESSAGE_EXCEPTION;
+                WatchLogger.Log(ex.Message);
+            }
             return response;
         }
     }
