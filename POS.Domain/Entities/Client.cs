@@ -26,6 +26,5 @@ namespace POS.Domain.Entities
         public DateTime? AuditDeleteDate { get; set; }
 
         public virtual DocumentType DocumentType { get; set; } = null!;
-        public virtual ICollection<Sale> Sales { get; set; }
     }
 }
